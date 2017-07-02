@@ -3,23 +3,24 @@ use strict;
 use RPi::Pin;
 use RPi::WiringPi::Constant qw(:all);
 use Time::HiRes qw(usleep);
-while(1){
-my $time=localtime;
-print $time."\n";
-        if ($time=~/\w*\s\w*\s\d*\s(\d*):(\d*):(\d*)/){
-                print "$1:$2:$3";
-                print"\n";
-        }
-
-                if ($2==00 && $3==00 || $2==30 && $3==00 ){  #Æ¥Åä³É¹¦Ë²¼ä£¬¼ÓÉÏsleep£¬
-                         print "on\n"; #ÔÚ´Ë´¦¼ÓÉÏ·äÃÛÆ÷ºÍledµÄÆô¶¯³ÌÐò
-                 my $pin= RPi::Pin->new(18);  #·äÃÛÆ÷Ä£¿é
-                        $pin-> mode(PWM_OUT);
-                        $pin->pwm_write(18,512);
-                        sleep(2);
-                    $pin->mode(INPUT);
-                }else{
-                        print "please wait!\n";
+        my $pin= RPi::Pin->new(18);  #èœ‚èœœå™¨æ¨¡å—gpio.pin18;
+        $pin-> mode(OUTPUT);#åˆå§‹åŒ–æ²‰é»˜èœ‚é¸£å™¨ï¼›
+        $pin->write(HIGH);
+        while(1){
+        my $time=localtime;
+        print $time."\n";
+                if ($time=~/\w*\s\w*\s\d*\s(\d*):(\d*):(\d*)/){
+                         print "$1:$2:$3"; #å–å‡ºlocaltime æ—¶åˆ†ç§’éƒ¨åˆ†ï¼›
+                     print"\n";
                 }
-sleep(1);
-}
+                     if ($2==00 && $3==00 || $2==30 && $3==00 ){  #åŒ¹é…æˆåŠŸï¼Œæ•´ç‚¹æˆ–åŠç‚¹æŠ¥æ—¶ï¼›
+                                $pin-> mode(OUTPUT);
+                                $pin->write(LOW);
+                                sleep(2);
+                                $pin-> mode(OUTPUT);#å…³é—­èœ‚é¸£ï¼›
+                                $pin->write(HIGH);
+                        }else{
+                                print "please wait!\n";
+                        }
+          sleep(1);
+        }
