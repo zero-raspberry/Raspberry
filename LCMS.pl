@@ -14,7 +14,7 @@ foreach my$fasta(@dataset){
 	$hash{$key}=$value;#提取fasta文件hash；
 }
 #foreach(keys %hash){print"$_=>$hash{$_}\n"};
-close FILE;
+close FILE；
 
 
 my @dna=values%hash;#此处是所有的fasta序列列表；
