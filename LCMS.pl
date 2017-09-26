@@ -89,3 +89,4 @@ open(FILE,'>F:\Bioinformatics\eclipse\workplace\rosalind_lcsm_1_datasetOUT.txt')
 print FILE"@shared_substringnew\n";
 =cut
 
+
