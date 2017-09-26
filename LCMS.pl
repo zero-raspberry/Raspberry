@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 use strict;
-my $filepath='D:\eclipse\workspace\Rosalind\rosalind_lcsm.txt';
+my $filepath='C:\Users\ba102\Downloads\rosalind_lcsm.txt';
 open(FILE,"< $filepath")or
 die"Can't open such file $!\n";
 my@dataset=<FILE>;
@@ -11,61 +11,72 @@ foreach my$fasta(@dataset){
 		$key=$fasta;
 		undef $value;
 	}else{$value.=$fasta}
-	$hash{$key}=$value;#ÌáÈ¡fastaÎÄ¼şhash£»
+	$hash{$key}=$value;#æå–fastaæ–‡ä»¶hashï¼›
 }
-#foreach(keys %hash){print "$_=>$hash{$_}\n"};
+#foreach(keys %hash){print"$_=>$hash{$_}\n"};
 close FILE;
 
-my @dna=values%hash;#´Ë´¦ÊÇËùÓĞµÄfastaĞòÁĞÁĞ±í£»
+
+my @dna=values%hash;#æ­¤å¤„æ˜¯æ‰€æœ‰çš„fastaåºåˆ—åˆ—è¡¨ï¼›
 	#print "hash values====:@dna\n";
 my %reverse_hash;
 foreach my$odfasta(@dna){
 	my$long=length$odfasta;
 	$reverse_hash{$odfasta}=$long;
 };
-my@reverse_hash=sort{$reverse_hash{$a}<=>$reverse_hash{$b}}keys %reverse_hash;#´Ë´¦ÊÇËùÓĞµÄfastaĞòÁĞ´Ó¶Ìµ½³¤ÅÅÁĞµÄÁĞ±í£»
-#fastaĞòÁĞ¸ù¾İ³¤¶ÈºÍASCII´ÓĞ¡µ½´óÅÅĞò£»
+my@reverse_hash=sort{$reverse_hash{$a}<=>$reverse_hash{$b}}keys %reverse_hash;#æ­¤å¤„æ˜¯æ‰€æœ‰çš„fastaåºåˆ—ä»çŸ­åˆ°é•¿æ’åˆ—çš„åˆ—è¡¨ï¼›
+#fastaåºåˆ—æ ¹æ®é•¿åº¦å’ŒASCIIä»å°åˆ°å¤§æ’åºï¼›
 #print "reverse_hash values===:@reverse_hash\n";
-my$assumption_longest_shared=$reverse_hash[0]; #fastaÎÄ¼şÖĞ×î¶ÌµÄĞòÁĞ£»
+my$assumption_longest_shared=$reverse_hash[0]; #fastaæ–‡ä»¶ä¸­æœ€çŸ­çš„åºåˆ—ï¼›
 	#print "I'm shortest fasta====:$assumption_longest_shared\n";
 my$long=length$assumption_longest_shared;
 
-#ÓÃ×î¶ÌµÄĞòÁĞÉú³Éshared substring ÁĞ±í£»
+
+
+#ç”¨æœ€çŸ­çš„åºåˆ—ç”Ÿæˆshared substring åˆ—è¡¨ï¼›
 my@shared_substring;my$assumption_longest_shared_subset;my@assumption_longest_shared_subset;
-for(my$i=0;$i<$long;$i++){#Ã¿´Î´ÓÇ°Ãæ¼õÈ¥1base,Éú³ÉĞÂµÄÁĞ±í£»
+for(my$i=0;$i<$long;$i++){#æ¯æ¬¡ä»å‰é¢å‡å»1base,ç”Ÿæˆæ–°çš„åˆ—è¡¨ï¼›
 	$assumption_longest_shared_subset=substr($assumption_longest_shared,$i);
 		#print "\$assumption_longest_shared_subset:$assumption_longest_shared_subset\n";
 		push@assumption_longest_shared_subset,$assumption_longest_shared_subset;
 }
-#print"@assumption_longest_shared_subset\n";	
-foreach(@assumption_longest_shared_subset){#±éÀúÉÏÃæÁĞ±íÀïµÄÔªËØ	
+#print "@assumption_longest_shared_subset\n";
+
+ 
+	
+foreach(@assumption_longest_shared_subset){#éå†ä¸Šé¢åˆ—è¡¨é‡Œçš„å…ƒç´ 	
 	my$long_set=length$_;
 	#print"\$_:$_,$long_set\n";
-		for(my$i=0;$i<$long_set;$i++){#Ã¿¸öÔªËØ´ÓºóÃæ¼õÈ¥1base/´Î£»
+		for(my$i=0;$i<$long_set;$i++){#æ¯ä¸ªå…ƒç´ ä»åé¢å‡å»1base/æ¬¡ï¼›
 				my$share=substr($_,0,$long_set-$i);
 				push@shared_substring,$share;
 	}
 }
-#°ÑÉú³ÉµÄsubstringÈ¥ÖØ¸´£¬¶ÔÆ¬¶Î´Ó³¤µ½¶ÌÅÅĞò£¬È»ºóÓÃÆ¬¶ÎÈ¥±È¶ÔÃ¿Ò»¸öfastaÎÄ¼ş£»
+
+#æŠŠç”Ÿæˆçš„substringå»é‡å¤ï¼Œå¯¹ç‰‡æ®µä»é•¿åˆ°çŸ­æ’åºï¼Œç„¶åç”¨ç‰‡æ®µå»æ¯”å¯¹æ¯ä¸€ä¸ªfastaæ–‡ä»¶ï¼›
 my%substring;
 foreach my$ele(@shared_substring){
 	my$long=length$ele;
 	$substring{$ele}=$long;
 };
-my@reverse_shared_substring=sort{$substring{$b}<=>$substring{$a}}keys %substring; #´Ë´¦ÊÇËùÓĞµÄsubstringµÄÁĞ±í£»
+my@reverse_shared_substring=sort{$substring{$b}<=>$substring{$a}}keys %substring; #æ­¤å¤„æ˜¯æ‰€æœ‰çš„substringçš„åˆ—è¡¨ï¼›
 #print "I'm all of assumption shared substring===:@reverse_shared_substring\n+++++++++++++++++++++++++++++\n";
 
-#ÓÃsubstringÈ¡±éÀúfastaÁĞ±í£»
+#ç”¨substringå–éå†fastaåˆ—è¡¨ï¼›
 my$fing_string;my$aim_fasta;my$alintimes=scalar@reverse_hash;my@shared;
 foreach $fing_string(@reverse_shared_substring){
 	#print"substring:$fing_string\n========>>>>\n";
 	my$flag=0;
 	foreach $aim_fasta(@reverse_hash){
 		#print"$aim_fasta\n";
-		if($aim_fasta=~/.*$fing_string.*/s){$flag++;print"flag:$flag,fasta:$aim_fasta\n";}else{next;};if($flag==$alintimes){push@shared,$fing_string;$flag=0;}
+		if($aim_fasta=~/.*$fing_string.*/s){$flag++;}else{next;};if($flag==$alintimes){push@shared,$fing_string;$flag=0;}
 	}	
 }
-
+#=pod
+open(FILE1,'>F:\Bioinformatics\eclipse\workplace\subset.txt');
+print FILE1 "@shared\n";
+#=cut
+=pod #æ­¤å¤„ä¸éœ€è¦åœ¨å¯¹ç¬¦åˆæ¡ä»¶çš„substringåˆ—è¡¨è¿›è¡Œå­—ç¬¦ä¸²é•¿åº¦æ’åºï¼Œå› ä¸ºéå†æ—¶æ˜¯ä»é•¿åˆ°çŸ­çš„æ“ä½œï¼Œå› æ­¤å–å‡º$sharedã€0ã€‘å³ä¸ºæœ€é•¿çš„substringä¹‹ä¸€ï¼›
 @shared=sort@shared;
 my%shared;
 foreach my$eles(@shared){
@@ -73,6 +84,8 @@ foreach my$eles(@shared){
 	$shared{$eles}=$long;
 };
 my@shared_substringnew=sort{$shared{$b}<=>$shared{$a}}keys %shared;
-print"@shared_substringnew\n";
+open(FILE,'>F:\Bioinformatics\eclipse\workplace\rosalind_lcsm_1_datasetOUT.txt');
 
+print FILE"@shared_substringnew\n";
+=cut
 
